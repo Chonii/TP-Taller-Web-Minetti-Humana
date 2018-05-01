@@ -7,6 +7,9 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import ar.edu.unlam.tallerweb1.modelo.Barrio;
+import ar.edu.unlam.tallerweb1.modelo.Direccion;
 import ar.edu.unlam.tallerweb1.modelo.Farmacia;/*
 import ar.edu.unlam.tallerweb1.modelo.Direccion;
 import ar.edu.unlam.tallerweb1.modelo.Punto;
@@ -29,38 +32,65 @@ public class TestFarmacia extends SpringTest{
 	@Before
 	public void setUp(){
 	sesion = this.getSession();
-		}
 	
-    @Test
+	Farmacia Farmacia1 = new Farmacia("MartinGarcia","123456","Lunes");
+	sesion.save(Farmacia1);
+	Farmacia Farmacia2 = new Farmacia("Lasalle","234567","Martes");
+	sesion.save(Farmacia2);	
+	Farmacia Farmacia3 = new Farmacia("LosCeibos","345678","Martes"); 
+	sesion.save(Farmacia3);
+	
+	Barrio Barrio1 = new Barrio("VirreyDelPino");
+	sesion.save(Barrio1);	
+	Barrio Barrio2 = new Barrio("Pontevedra");
+	sesion.save(Barrio2);	
+	Barrio Barrio3 = new Barrio("LosCeibos");
+	sesion.save(Barrio3);
+	
+	Direccion Direccion1 = new Direccion("Villarroel","578",Barrio1);
+	sesion.save(Direccion1);
+	Direccion Direccion2 = new Direccion("Pantaleo","1177",Barrio2);
+	sesion.save(Direccion2);
+	Direccion Direccion3 = new Direccion("Villarroel","954",Barrio3);
+	sesion.save(Direccion3);
+	
+	Farmacia1.setDireccion(Direccion1);
+	Farmacia2.setDireccion(Direccion2);
+	Farmacia3.setDireccion(Direccion3);
+	
+}
+	
+// Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​turno​ ​los​ ​dias​ ​martes
+	@Test
     @Transactional @Rollback(true)
     public void testBuscarFarmaciasTurno() {
-    	Farmacia Farmacia1 = new Farmacia();
-    	Farmacia1.setNombre("MartinGarcia");
-    	Farmacia1.setTelefono("123456");
-    	Farmacia1.setDiaDeTurno("Lunes");
-    	sesion.save(Farmacia1);
 
-    	Farmacia Farmacia2 = new Farmacia();
-    	Farmacia2.setNombre("Lasalle");
-    	Farmacia2.setTelefono("234567");
-    	Farmacia2.setDiaDeTurno("Martes");
-    	sesion.save(Farmacia2);
-    	
-    	Farmacia Farmacia3 = new Farmacia();
-    	Farmacia3.setNombre("LosCeibos");
-    	Farmacia3.setTelefono("345678");
-    	Farmacia3.setDiaDeTurno("Martes");
-    	sesion.save(Farmacia3);
-    
-// Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​turno​ ​los​ ​dias​ ​martes
-    	
     	List<Farmacia> listaFarmacia;
     	listaFarmacia =
     			sesion.createCriteria(Farmacia.class)
     			.add(Restrictions.eq("diaDeTurno", "Martes"))
     			.list();
 
-    	assertThat(listaFarmacia.size()).isEqualTo(2);	
+    	assertThat(listaFarmacia.size()).isEqualTo(2);
     	}
+    
+// Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​una​ ​calle
+    @Test
+    @Transactional @Rollback(true)
+    public void testBuscarFarmaciasDeUnaCalle() {
+    
+    	List<Farmacia> listaFarmacia;
+    	listaFarmacia =
+    			sesion.createCriteria(Farmacia.class)
+    			.createAlias("direccion","direccionBuscada")
+    			.add(Restrictions.eq("direccionBuscada.calle","Villarroel"))
+    			.list();
 
-}
+    	assertThat(listaFarmacia.size()).isEqualTo(2);
+    	}
+  
+// ​Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​un​ ​barrio
+    
+    }
+    
+

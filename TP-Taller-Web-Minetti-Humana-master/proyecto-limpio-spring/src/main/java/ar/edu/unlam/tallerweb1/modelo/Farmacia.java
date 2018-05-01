@@ -19,9 +19,10 @@ public class Farmacia {
 	@OneToOne
 	private Punto geoLocalizacion;
 	
-	public Farmacia(String nombre,String telefono) {
+	public Farmacia(String nombre,String telefono,String diaDeTurno) {
 		this.nombre=nombre;
 		this.telefono=telefono;
+		this.diaDeTurno=diaDeTurno;
 	}
 	public Farmacia() {
 	}
