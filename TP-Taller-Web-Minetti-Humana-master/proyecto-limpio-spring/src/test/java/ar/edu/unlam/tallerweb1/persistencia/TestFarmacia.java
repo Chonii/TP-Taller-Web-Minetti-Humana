@@ -90,6 +90,17 @@ public class TestFarmacia extends SpringTest{
     	}
   
 // ​Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​un​ ​barrio
+    @Test
+    @Transactional @Rollback(true)
+    public void testQueBuscaLasFarmaciasDeUnMismoBarrio() {
+     List<Farmacia> listaFarmacia;
+     listaFarmacia = sesion.createCriteria(Farmacia.class)
+       .createAlias("direccion","direccionBuscada")
+       .createAlias("direccionBuscada.barrio","barrioBuscado")
+       .add(Restrictions.eq("barrioBuscado.nombre", "VirreyDelPino"))
+       .list();
+     assertThat(listaFarmacia.size()).isEqualTo(1);
+    }
     
     }
     
