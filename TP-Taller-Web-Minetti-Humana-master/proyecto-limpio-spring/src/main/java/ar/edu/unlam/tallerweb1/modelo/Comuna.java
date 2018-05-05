@@ -34,6 +34,7 @@ public class Comuna {
 	public void setListaBarrios(List<Barrio> listaBarrios) {
 		this.listaBarrios = listaBarrios;
 	}
-	
-	
+	public void agregarBarrio(Barrio miBarrio) {
+		this.listaBarrios.add(miBarrio);
+	}
 }

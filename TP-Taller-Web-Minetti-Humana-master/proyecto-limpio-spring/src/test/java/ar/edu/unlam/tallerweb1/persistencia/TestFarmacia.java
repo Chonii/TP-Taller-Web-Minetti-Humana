@@ -9,6 +9,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.modelo.Barrio;
+import ar.edu.unlam.tallerweb1.modelo.Comuna;
 import ar.edu.unlam.tallerweb1.modelo.Direccion;
 import ar.edu.unlam.tallerweb1.modelo.Farmacia;/*
 import ar.edu.unlam.tallerweb1.modelo.Direccion;
@@ -28,30 +29,36 @@ import org.hibernate.criterion.Restrictions;
 
 public class TestFarmacia extends SpringTest{
 	private Session sesion;
-	
+
 	@Before
 	public void setUp(){
-	sesion = this.getSession();
+		
+	sesion = this.getSession();	
 	
 	Farmacia Farmacia1 = new Farmacia("MartinGarcia","123456","Lunes");
-	sesion.save(Farmacia1);
 	Farmacia Farmacia2 = new Farmacia("Lasalle","234567","Martes");
-	sesion.save(Farmacia2);	
 	Farmacia Farmacia3 = new Farmacia("LosCeibos","345678","Martes"); 
+	
+	sesion.save(Farmacia1);
+	sesion.save(Farmacia2);	
 	sesion.save(Farmacia3);
 	
 	Barrio Barrio1 = new Barrio("VirreyDelPino");
-	sesion.save(Barrio1);	
-	Barrio Barrio2 = new Barrio("Pontevedra");
-	sesion.save(Barrio2);	
-	Barrio Barrio3 = new Barrio("LosCeibos");
+	Barrio Barrio3 = new Barrio("LosCeibos");	
+	Barrio Barrio2 = new Barrio("Ituazaingo");
+	
 	sesion.save(Barrio3);
+	sesion.save(Barrio1);
+	sesion.save(Barrio2);	
+	
+	
 	
 	Direccion Direccion1 = new Direccion("Villarroel","578",Barrio1);
-	sesion.save(Direccion1);
 	Direccion Direccion2 = new Direccion("Pantaleo","1177",Barrio2);
+	Direccion Direccion3 = new Direccion("Villarroel","954",Barrio1); 
+	
+	sesion.save(Direccion1);
 	sesion.save(Direccion2);
-	Direccion Direccion3 = new Direccion("Villarroel","954",Barrio3);
 	sesion.save(Direccion3);
 	
 	Farmacia1.setDireccion(Direccion1);
@@ -88,6 +95,7 @@ public class TestFarmacia extends SpringTest{
 
     	assertThat(listaFarmacia.size()).isEqualTo(2);
     	}
+
   
 // ​Hacer​ ​con​ ​junit​ ​un​ ​test​ ​que​ ​busque​ ​todas​ ​las​ ​farmacias​ ​de​ ​un​ ​barrio
     @Test
@@ -99,9 +107,9 @@ public class TestFarmacia extends SpringTest{
        .createAlias("direccionBuscada.barrio","barrioBuscado")
        .add(Restrictions.eq("barrioBuscado.nombre", "VirreyDelPino"))
        .list();
-     assertThat(listaFarmacia.size()).isEqualTo(1);
+     assertThat(listaFarmacia.size()).isEqualTo(2);
     }
     
-    }
+  }
     
 
